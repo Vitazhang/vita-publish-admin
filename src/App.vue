@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>项目开始</p>
+    <router-view></router-view>
   </div>
 </template>
 

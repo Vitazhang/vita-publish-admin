@@ -4,6 +4,12 @@ import router from './router'
 import store from './store'
 //加载全局样式文件
 import './styles/index.less'
+//element ui
+import ElementUI from 'element-ui';
+import 'element-ui/lib/theme-chalk/index.css';
+
+Vue.use(ElementUI)
+
 
 Vue.config.productionTip = false
 
