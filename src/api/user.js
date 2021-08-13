@@ -12,11 +12,31 @@ export const login = data => {
     }
     //获取用户信息
 export const getUserProfile = () => {
+
+
     return request({
         method: 'GET',
         url: '/mp/v1_0/user/profile',
-        headers: {
-            Authorization: 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2NjAyMDQ4NzIsInVzZXJfaWQiOjEsInJlZnJlc2giOmZhbHNlLCJ2ZXJpZmllZCI6dHJ1ZX0.-nLpCbNvi51R5lgwOoWRI6JQn1ODYmzIPwhL1YzP7bs'
-        }
+
     })
 }
+
+// 请求拦截器,
+request.interceptors.request.use(
+    // 任何请求都会经过这里
+    //config 是当前请求相关的配置信息对象,可以修改
+    function(config) {
+        //统一做修改,然后再发
+        const user = JSON.parse(window.localStorage.getItem('user'))
+        if (user) {
+            config.headers.Authorization = `Bearer ${user.token}`
+        }
+
+        // 不返回是发不出去的,修改好了,返回给他发
+        return config
+    },
+    //请求失败就会经过这里
+    function(error) {
+        return Promise.reject(error)
+    }
+)

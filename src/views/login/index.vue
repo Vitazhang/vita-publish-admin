@@ -107,7 +107,10 @@ export default {
           });
           //关闭 loading
           this.loginLoading = false;
-
+          // 接口返回的用户相关数据放到本地存储
+          //本地存储只能存储字符串,要转换成JSON格式
+          window.localStorage.setItem('user',JSON.stringify(res.data.data))
+          //跳转到首页
           this.$router.push('/')
           // this.$router.push({
           //     name:'layout',

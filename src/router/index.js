@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import Login from '@/views/login'
 import HomeIndex from '@/views/home'
 import LayoutIndex from '@/views/layout'
+import Article from '@/views/article'
 
 Vue.use(VueRouter)
 
@@ -18,12 +19,33 @@ const routes = [{
         path: '', //path 为空是设置为默认子路由
         name: 'home',
         component: HomeIndex,
+    }, {
+        path: '/article',
+        name: 'article',
+        component: Article,
     }]
 
 }, ]
 
+
+
+
+
 const router = new VueRouter({
     routes
+});
+//添加守卫
+router.beforeEach((to, from, next) => {
+    const user = JSON.parse(window.localStorage.getItem('user'))
+    if (to.path !== '/login') {
+        if (user) {
+            next()
+        } else {
+            next('/login')
+        }
+    } else {
+        next()
+    }
 })
 
 export default router

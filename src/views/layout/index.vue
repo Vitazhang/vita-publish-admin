@@ -1,23 +1,28 @@
 <template>
   <el-container class="layout-container">
-    <el-aside class="layout-aside" width="200px">
-      <LayoutAside class="layout-aside" />
+    <el-aside class="layout-aside" width="auto">
+      <LayoutAside class="layout-aside" :isCollapse="isCollapse" />
     </el-aside>
     <el-container>
       <el-header class="layout-header">
         <div>
-          <i class="el-icon-s-fold"></i>
+          <i
+            :class="{ 'el-icon-back': !isCollapse, 'el-icon-right': isCollapse }"
+            @click="isCollapse = !isCollapse"
+          ></i>
           <span>咸宁园林绿化有限公司</span>
         </div>
         <el-dropdown>
           <div class="avatar-wrap">
-              <img :src="user.photo" alt="" class="avatar-img">
-              <span>{{user.name}}</span>
-              <i class="el-icon-arrow-down el-icon--right"></i>
+            <img :src="user.photo" alt="" class="avatar-img" />
+            <span>{{ user.name }}</span>
+            <i class="el-icon-arrow-down el-icon--right"></i>
           </div>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item icon="el-icon-plus">个人设置</el-dropdown-item>
-            <el-dropdown-item icon="el-icon-circle-plus"
+            <el-dropdown-item 
+            icon="el-icon-circle-plus"
+            @click.native="onLogout()"
               >用户退出</el-dropdown-item
             >
           </el-dropdown-menu>
@@ -30,26 +35,48 @@
 
 <script>
 import LayoutAside from "@/views/layout/components/aside";
-import { getUserProfile} from '@/api/user'
+import { getUserProfile } from "@/api/user";
 export default {
   name: "LayoutIndex",
   data() {
-      return {
-          user: {}
-      }
+    return {
+      isCollapse: false,
+      user: {},
+    };
   },
   components: {
     LayoutAside,
   },
-  created(){
-      this.loadUserProfile()
+  created() {
+    this.loadUserProfile();
   },
   methods: {
-      loadUserProfile() {
-          getUserProfile().then((res)=>{
-              this.user = res.data.data
-          })
-      }
+    loadUserProfile() {
+      getUserProfile().then((res) => {
+        this.user = res.data.data;
+      });
+    },
+    onLogout(){
+      this.$confirm('是否退出登录', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$message({
+            type: 'success',
+            message: '退出成功!'
+          });
+          //清除用户状态
+          window.localStorage.removeItem('user')
+          // 跳转到登录页面
+          this.$router.push('/login')
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '取消退出'
+          });          
+        });
+    }
   },
 };
 </script>
@@ -71,14 +98,14 @@ export default {
   align-items: center;
   border-block: 1px solid #ccc;
 }
-.avatar-wrap{
-    display: flex;
-    align-items: center;
-    .avatar-img{
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        margin-right: 5px;
-    }
+.avatar-wrap {
+  display: flex;
+  align-items: center;
+  .avatar-img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 5px;
+  }
 }
 </style>
