@@ -36,6 +36,7 @@
 <script>
 import LayoutAside from "@/views/layout/components/aside";
 import { getUserProfile } from "@/api/user";
+import globalBus from '@/utils/global-bus'
 export default {
   name: "LayoutIndex",
   data() {
@@ -49,6 +50,10 @@ export default {
   },
   created() {
     this.loadUserProfile();
+    globalBus.$on('update-user',data =>{
+      this.user.name = data.name
+      this.user.photo = data.photo
+    })
   },
   methods: {
     loadUserProfile() {

@@ -57,3 +57,17 @@ export const updateArticle = (aid, data, draft = false) => {
         data
     })
 };
+
+//修改文章评论状态
+export const updateCommentStatus = (aid, ac) => {
+    return request({
+        method: 'PUT',
+        url: '/mp/v1_0/comments/status',
+        params: {
+            article_id: aid
+        },
+        data: {
+            allow_comment: ac
+        }
+    })
+};
